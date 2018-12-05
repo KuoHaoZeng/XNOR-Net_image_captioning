@@ -47,5 +47,12 @@ $ python sample_bin.py --image='png/example.png'
 
 <br>
 
+## TODO
+
+- [ ] ONNX implementation
+- [ ] TVM implementation
+
+<br>
+
 ## Acknowledge
 Specially thank [Yunjey Choi](https://github.com/yunjey) for making the [image captioning tutorial](https://github.com/yunjey/pytorch-tutorial/tree/master/tutorials/03-advanced/image_captioning) for PyTorch public. Also thank [jiecaoyu](https://github.com/jiecaoyu) for making the [XNOR-Net](https://github.com/jiecaoyu/XNOR-Net-PyTorch) for PyTorch public.
