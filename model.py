@@ -3,21 +3,32 @@ import torch.nn as nn
 import torchvision.models as models
 from torch.nn.utils.rnn import pack_padded_sequence
 
+backbone_zoo = {'resnet152': models.resnet152,\
+                'resnet101': models.resnet101,\
+                'resnet50': models.resnet50,\
+                'resnet34': models.resnet34,\
+                'resnet18': models.resnet18,\
+                'densenet161': models.densenet161,\
+                'densenet201': models.densenet201,\
+                'densenet169': models.densenet169,\
+                'densenet121': models.densenet121,\
+                'inception_v3': models.inception_v3,\
+                }
 
 class EncoderCNN(nn.Module):
-    def __init__(self, embed_size):
+    def __init__(self, embed_size, backbone = 'resnet18'):
         """Load the pretrained ResNet-152 and replace top fc layer."""
         super(EncoderCNN, self).__init__()
-        resnet = models.resnet18(pretrained=True)
-        modules = list(resnet.children())[:-1]      # delete the last fc layer.
-        self.resnet = nn.Sequential(*modules)
-        self.linear = nn.Linear(resnet.fc.in_features, embed_size)
+        backbone = backbone_zoo[backbone](pretrained=True)
+        modules = list(backbone.children())[:-1]      # delete the last fc layer.
+        self.backbone = nn.Sequential(*modules)
+        self.linear = nn.Linear(backbone.fc.in_features, embed_size)
         self.bn = nn.BatchNorm1d(embed_size, momentum=0.01)
         
     def forward(self, images):
         """Extract feature vectors from input images."""
         #with torch.no_grad():
-        features = self.resnet(images)
+        features = self.backbone(images)
         features = features.reshape(features.size(0), -1)
         features = self.bn(self.linear(features))
         return features

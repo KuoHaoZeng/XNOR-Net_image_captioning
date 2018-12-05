@@ -16,10 +16,6 @@ from BinOp import BinOp
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def main(args):
-    # Create model directory
-    if not os.path.exists(args.model_path):
-        os.makedirs(args.model_path)
-    
     # Image preprocessing, normalization for the pretrained resnet
     transform = transforms.Compose([ 
         transforms.RandomCrop(args.crop_size),
@@ -38,7 +34,7 @@ def main(args):
                              shuffle=True, num_workers=args.num_workers) 
 
     # Build the models
-    encoder = EncoderCNN(args.embed_size).to(device)
+    encoder = EncoderCNN(args.embed_size, args.embed_backbone).to(device)
     encoder_bin_op = BinOp(encoder)
     decoder = DecoderRNN(args.embed_size, args.hidden_size, len(vocab), args.num_layers).to(device)
     decoder_bin_op = BinOp(decoder)
@@ -103,6 +99,7 @@ if __name__ == '__main__':
     parser.add_argument('--save_step', type=int , default=1000, help='step size for saving trained models')
     
     # Model parameters
+    parser.add_argument('--embed_backbone', type=str , default='resnet101', help='dimension of word embedding vectors')
     parser.add_argument('--embed_size', type=int , default=256, help='dimension of word embedding vectors')
     parser.add_argument('--hidden_size', type=int , default=512, help='dimension of lstm hidden states')
     parser.add_argument('--num_layers', type=int , default=1, help='number of layers in lstm')
@@ -111,6 +108,14 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--num_workers', type=int, default=8)
     parser.add_argument('--learning_rate', type=float, default=0.001)
+
     args = parser.parse_args()
+    # Create model directory
+    if not os.path.exists(args.model_path):
+        os.makedirs(args.model_path)
+    args.model_path += args.embed_backbone + '/'
+    if not os.path.exists(args.model_path):
+        os.makedirs(args.model_path)
+
     print(args)
     main(args)
