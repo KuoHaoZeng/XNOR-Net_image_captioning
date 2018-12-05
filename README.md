@@ -44,8 +44,8 @@ $ python sample_bin.py --image='png/example.png'
 
 ## TODO
 
-[] ONNX implementation
-[] TVM implementation
+- [ ] ONNX implementation
+- [ ] TVM implementation
 
 <br>
 
