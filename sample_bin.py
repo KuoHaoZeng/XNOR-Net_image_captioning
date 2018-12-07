@@ -35,7 +35,7 @@ def main(args):
         vocab = pickle.load(f)
 
     # Build models
-    encoder = EncoderCNN(args.embed_size).eval()  # eval mode (batchnorm uses moving mean/variance)
+    encoder = EncoderCNN(args.embed_size, args.embed_backbone).eval()  # eval mode (batchnorm uses moving mean/variance)
     decoder = DecoderRNN(args.embed_size, args.hidden_size, len(vocab), args.num_layers)
     encoder = encoder.to(device)
     decoder = decoder.to(device)
@@ -80,8 +80,8 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--image', type=str, required=True, help='input image for generating caption')
-    parser.add_argument('--encoder_path', type=str, default='bin_models/encoder-2-1000.ckpt', help='path for trained encoder')
-    parser.add_argument('--decoder_path', type=str, default='bin_models/decoder-2-1000.ckpt', help='path for trained decoder')
+    parser.add_argument('--encoder_path', type=str, default='bin_models/encoder-10-1000.ckpt', help='path for trained encoder')
+    parser.add_argument('--decoder_path', type=str, default='bin_models/decoder-10-1000.ckpt', help='path for trained decoder')
     parser.add_argument('--vocab_path', type=str, default='data/vocab.pkl', help='path for vocabulary wrapper')
     
     # Model parameters (should be same as paramters in train.py)
@@ -90,6 +90,6 @@ if __name__ == '__main__':
     parser.add_argument('--hidden_size', type=int , default=512, help='dimension of lstm hidden states')
     parser.add_argument('--num_layers', type=int , default=1, help='number of layers in lstm')
     args = parser.parse_args()
-    args.encoder_path = encoder_path.split('/')[0] + '/' + args.embed_backbone + '/' + encoder_path.split('/')[1]
-    args.decoder_path = decoder_path.split('/')[0] + '/' + args.embed_backbone + '/' + decoder_path.split('/')[1]
+    args.encoder_path = args.encoder_path.split('/')[0] + '/' + args.embed_backbone + '/' + args.encoder_path.split('/')[1]
+    args.decoder_path = args.decoder_path.split('/')[0] + '/' + args.embed_backbone + '/' + args.decoder_path.split('/')[1]
     main(args)

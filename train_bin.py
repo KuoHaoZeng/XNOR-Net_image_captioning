@@ -11,6 +11,7 @@ from torch.nn.utils.rnn import pack_padded_sequence
 from torchvision import transforms
 
 from BinOp import BinOp
+import pdb
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -86,6 +87,12 @@ def main(args):
                     args.model_path, 'decoder-{}-{}.ckpt'.format(epoch+1, i+1)))
                 torch.save(encoder.state_dict(), os.path.join(
                     args.model_path, 'encoder-{}-{}.ckpt'.format(epoch+1, i+1)))
+
+            if i == 5:
+                optimizer.param_groups[0]['lr'] /= 10.
+
+            if i == 9:
+                optimizer.param_groups[0]['lr'] /= 10.
 
 
 if __name__ == '__main__':

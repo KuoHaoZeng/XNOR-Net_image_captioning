@@ -29,7 +29,7 @@ class EncoderCNN(nn.Module):
         """Extract feature vectors from input images."""
         #with torch.no_grad():
         features = self.backbone(images)
-        features = features.reshape(features.size(0), -1)
+        features = features.view(features.size(0), -1)
         features = self.bn(self.linear(features))
         return features
 
