@@ -49,7 +49,7 @@ $ python sample_bin.py --image='png/example.png'
 
 ## TODO
 
-- [ ] ONNX implementation
+- [x] ONNX implementation
 - [ ] TVM implementation
 
 <br>
