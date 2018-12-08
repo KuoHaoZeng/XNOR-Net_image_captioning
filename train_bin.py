@@ -53,7 +53,7 @@ def main(args):
             # Set mini-batch dataset
             images = images.to(device)
             captions = captions.to(device)
-            targets = pack_padded_sequence(captions, lengths, batch_first=True)[0]
+            targets = pack_padded_sequence(captions.transpose(0, 1), lengths)[0]
             
             # Binarize encoder & decoder
             encoder_bin_op.binarization()
